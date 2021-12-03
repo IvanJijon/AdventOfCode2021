@@ -27,7 +27,7 @@ func isDeeper(current, next int) bool {
 	return next > current
 }
 
-func reduce(depths []int) int {
+func reducePartOne(depths []int) int {
 	counter := 0
 	for current := 0; current < len(depths)-1; current++ {
 		if isDeeper(depths[current], depths[current+1]) {
@@ -36,4 +36,19 @@ func reduce(depths []int) int {
 	}
 
 	return counter
+}
+
+func reducePartTwo(depths []int) int {
+	counter := 0
+	for current := 0; current < len(depths)-3; current++ {
+		if isDeeper(sumMeasurementsByChunksOfThree(current, depths), sumMeasurementsByChunksOfThree(current+1, depths)) {
+			counter++
+		}
+	}
+
+	return counter
+}
+
+func sumMeasurementsByChunksOfThree(index int, depths []int) int {
+	return depths[index] + depths[index+1] + depths[index+2]
 }

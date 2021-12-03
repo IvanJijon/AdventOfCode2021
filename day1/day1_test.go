@@ -29,9 +29,24 @@ func (s *Day1Suite) TestIfNextMeasurmentIncreasesInDepth(c *C) {
 
 func (s *Day1Suite) TestCountHowManyMeasurementsAreLargerThanThePreviousOne(c *C) {
 	depths, _ := importData("day1_input_test")
-	c.Assert(reduce(depths), Equals, 2)
+	c.Assert(reducePartOne(depths), Equals, 2)
 
-	// Answer:
+	// Answer for part one:
 	depths, _ = importData("day1_input")
-	c.Assert(reduce(depths), Equals, 1692)
+	c.Assert(reducePartOne(depths), Equals, 1692)
+}
+
+func (s *Day1Suite) TestSumMeasurementsByChunksOfThree(c *C) {
+	depths, _ := importData("day1_input_test")
+	c.Assert(sumMeasurementsByChunksOfThree(0, depths), Equals, 441)
+	c.Assert(sumMeasurementsByChunksOfThree(1, depths), Equals, 461)
+}
+
+func (s *Day1Suite) TestCountHowManyMeasurementsAreLargerThanThePreviousOneByChunksOfThree(c *C) {
+	depths, _ := importData("day1_input_test")
+	c.Assert(reducePartTwo(depths), Equals, 1)
+
+	// Answer for part two
+	depths, _ = importData("day1_input")
+	c.Assert(reducePartTwo(depths), Equals, 1724)
 }
