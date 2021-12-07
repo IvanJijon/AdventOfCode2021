@@ -15,6 +15,7 @@ type command struct {
 type sumbarine struct {
 	horizontalPosition int
 	depth              int
+	aim                int
 }
 
 func importData(inputFile string) ([]command, error) {
@@ -36,7 +37,7 @@ func importData(inputFile string) ([]command, error) {
 	return commands, scanner.Err()
 }
 
-func (s *sumbarine) execute(c command) {
+func (s *sumbarine) rudimentarilyExecute(c command) {
 	switch c.instruction {
 	case "forward":
 		s.horizontalPosition += c.value
@@ -47,8 +48,20 @@ func (s *sumbarine) execute(c command) {
 	}
 }
 
-func (s *sumbarine) pilot(commands []command) {
+func (s *sumbarine) sophisticatedlyExecute(c command) {
+	switch c.instruction {
+	case "forward":
+		s.horizontalPosition += c.value
+		s.depth += s.aim * c.value
+	case "up":
+		s.aim -= c.value
+	case "down":
+		s.aim += c.value
+	}
+}
+
+func (s *sumbarine) pilot(commands []command, f func(c command)) {
 	for _, c := range commands {
-		s.execute(c)
+		f(c)
 	}
 }
