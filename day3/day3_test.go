@@ -98,8 +98,9 @@ func (s *Day3Suite) TestMostCommonValueInPosition(c *C) {
 		"101",
 		"010",
 		"101",
+		"100",
 	}
 	c.Assert(mostCommonValueInPosition(report, 0), Equals, "1")
 	c.Assert(mostCommonValueInPosition(report, 1), Equals, "0")
-	c.Assert(mostCommonValueInPosition(report, 2), Equals, "1")
+	c.Assert(mostCommonValueInPosition(report, 2), Equals, "=")
 }

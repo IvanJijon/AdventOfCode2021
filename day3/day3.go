@@ -65,6 +65,9 @@ func mostCommonValueInPosition(report []string, index int) string {
 	if ones > zeros {
 		mostCommon = "1"
 	}
+	if ones == zeros {
+		mostCommon = "="
+	}
 
 	return mostCommon
 }
