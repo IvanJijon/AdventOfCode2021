@@ -84,3 +84,22 @@ func (s *Day3Suite) TestAnswerDay3PartOne(c *C) {
 
 	c.Assert(gr*er, Equals, 3374136)
 }
+
+func (s *Day3Suite) TestMostCommonValueInPosition(c *C) {
+	report := []string{
+		"",
+	}
+	index := 0
+	c.Assert(mostCommonValueInPosition(report, index), Equals, "")
+
+	report = []string{
+		"001",
+		"100",
+		"101",
+		"010",
+		"101",
+	}
+	c.Assert(mostCommonValueInPosition(report, 0), Equals, "1")
+	c.Assert(mostCommonValueInPosition(report, 1), Equals, "0")
+	c.Assert(mostCommonValueInPosition(report, 2), Equals, "1")
+}

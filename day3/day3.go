@@ -27,22 +27,7 @@ func gammaRateAsBinaryString(report []string, index int) string {
 		return ""
 	}
 
-	mostCommon := "0"
-	ones := 0
-	zeros := 0
-	for _, r := range report {
-		if r[index] == '1' {
-			ones += 1
-			continue
-		}
-		zeros += 1
-	}
-
-	if ones > zeros {
-		mostCommon = "1"
-	}
-
-	return mostCommon + gammaRateAsBinaryString(report, index+1)
+	return mostCommonValueInPosition(report, index) + gammaRateAsBinaryString(report, index+1)
 }
 
 func stringToInt(input string) int {
@@ -60,4 +45,26 @@ func epsilonRateFromGammaRate(input string) string {
 		complement += "1"
 	}
 	return complement
+}
+
+func mostCommonValueInPosition(report []string, index int) string {
+	if len(report) == 0 || index >= len(report[0]) {
+		return ""
+	}
+	mostCommon := "0"
+	ones := 0
+	zeros := 0
+	for _, r := range report {
+		if r[index] == '1' {
+			ones += 1
+			continue
+		}
+		zeros += 1
+	}
+
+	if ones > zeros {
+		mostCommon = "1"
+	}
+
+	return mostCommon
 }
