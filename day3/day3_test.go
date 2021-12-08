@@ -23,7 +23,7 @@ func (s *Day3Suite) TestImportData(c *C) {
 	})
 }
 
-func (s *Day3Suite) TestgamaRateAsBinaryString(c *C) {
+func (s *Day3Suite) TestGamaRateAsBinaryString(c *C) {
 	report := []string{
 		"",
 	}
