@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func importData(inputFile string) ([]string, error) {
@@ -73,4 +74,18 @@ func mostAndLeastCommonValuesInGivenPosition(report []string, index int) (string
 	}
 
 	return mostCommon, leastCommon
+}
+
+func filterReportByBitPositionAndWantedValue(report []string, position int, value string) []string {
+	if len(report) == 0 || position >= len(report[0]) {
+		return []string{}
+	}
+
+	filteredReport := []string{}
+	for _, e := range report {
+		if strings.Split(e, "")[position] == value {
+			filteredReport = append(filteredReport, e)
+		}
+	}
+	return filteredReport
 }

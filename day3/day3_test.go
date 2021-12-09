@@ -113,3 +113,45 @@ func (s *Day3Suite) TestMostAndLeastCommonValuesInGivenPosition(c *C) {
 	c.Assert(mcv, Equals, "=")
 	c.Assert(lcv, Equals, "=")
 }
+
+func (s *Day3Suite) TestFilterReportEntriesByBitPositionAndWantedValue(c *C) {
+	report := []string{
+		"",
+	}
+	position := 0
+	value := "0"
+
+	c.Assert(filterReportByBitPositionAndWantedValue(report, position, value), DeepEquals, []string{})
+
+	report = []string{
+		"00100",
+		"11110",
+		"10110",
+		"10111",
+		"10101",
+		"01111",
+		"00111",
+		"11100",
+		"10000",
+		"11001",
+		"00010",
+		"01010",
+	}
+	position = 0
+	value = "1"
+	filteredReport := []string{
+		"11110",
+		"10110",
+		"10111",
+		"10101",
+		"11100",
+		"10000",
+		"11001",
+	}
+	c.Assert(filterReportByBitPositionAndWantedValue(report, position, value), DeepEquals, filteredReport)
+}
+
+// Get the most and least common values in given position -> check
+// Filter report by bit position and value -> check
+// Find the oxygen generator rating
+// Find the co2 scrubber rating
