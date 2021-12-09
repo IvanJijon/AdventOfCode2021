@@ -104,3 +104,24 @@ func (s *Day3Suite) TestMostCommonValueInPosition(c *C) {
 	c.Assert(mostCommonValueInPosition(report, 1), Equals, "0")
 	c.Assert(mostCommonValueInPosition(report, 2), Equals, "=")
 }
+
+func (s *Day3Suite) TestLeastCommonValueInPosition(c *C) {
+	report := []string{
+		"",
+	}
+	index := 0
+	c.Assert(leastCommonValueInPosition(report, index), Equals, "")
+
+	report = []string{
+		"001",
+		"100",
+		"101",
+		"010",
+		"101",
+		"100",
+	}
+	c.Assert(leastCommonValueInPosition(report, 0), Equals, "0")
+	c.Assert(leastCommonValueInPosition(report, 1), Equals, "1")
+	c.Assert(leastCommonValueInPosition(report, 2), Equals, "=")
+}
+

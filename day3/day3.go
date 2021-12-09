@@ -71,3 +71,20 @@ func mostCommonValueInPosition(report []string, index int) string {
 
 	return mostCommon
 }
+
+func leastCommonValueInPosition(report []string, index int) string {
+	if len(report) == 0 || index >= len(report[0]) {
+		return ""
+	}
+
+	mcv := mostCommonValueInPosition(report, index)
+
+	switch mcv {
+	case "0":
+		return "1"
+	case "1":
+		return "0"
+	}
+
+	return "="
+}
