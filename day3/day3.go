@@ -26,8 +26,9 @@ func gammaRateAsBinaryString(report []string, index int) string {
 	if len(report) == 0 || index >= len(report[0]) {
 		return ""
 	}
+	mcv, _ := mostAndLeastCommonValuesInGivenPosition(report, index)
 
-	return mostCommonValueInPosition(report, index) + gammaRateAsBinaryString(report, index+1)
+	return mcv + gammaRateAsBinaryString(report, index+1)
 }
 
 func stringToInt(input string) int {
@@ -47,11 +48,12 @@ func epsilonRateFromGammaRate(input string) string {
 	return complement
 }
 
-func mostCommonValueInPosition(report []string, index int) string {
+func mostAndLeastCommonValuesInGivenPosition(report []string, index int) (string, string) {
 	if len(report) == 0 || index >= len(report[0]) {
-		return ""
+		return "", ""
 	}
-	mostCommon := "0"
+	mostCommon := "="
+	leastCommon := "="
 	ones := 0
 	zeros := 0
 	for _, r := range report {
@@ -64,27 +66,11 @@ func mostCommonValueInPosition(report []string, index int) string {
 
 	if ones > zeros {
 		mostCommon = "1"
-	}
-	if ones == zeros {
-		mostCommon = "="
-	}
-
-	return mostCommon
-}
-
-func leastCommonValueInPosition(report []string, index int) string {
-	if len(report) == 0 || index >= len(report[0]) {
-		return ""
+		leastCommon = "0"
+	} else if ones < zeros {
+		mostCommon = "0"
+		leastCommon = "1"
 	}
 
-	mcv := mostCommonValueInPosition(report, index)
-
-	switch mcv {
-	case "0":
-		return "1"
-	case "1":
-		return "0"
-	}
-
-	return "="
+	return mostCommon, leastCommon
 }

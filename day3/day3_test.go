@@ -85,12 +85,15 @@ func (s *Day3Suite) TestAnswerDay3PartOne(c *C) {
 	c.Assert(gr*er, Equals, 3374136)
 }
 
-func (s *Day3Suite) TestMostCommonValueInPosition(c *C) {
+func (s *Day3Suite) TestMostAndLeastCommonValuesInGivenPosition(c *C) {
 	report := []string{
 		"",
 	}
 	index := 0
-	c.Assert(mostCommonValueInPosition(report, index), Equals, "")
+
+	mcv, lcv := mostAndLeastCommonValuesInGivenPosition(report, index)
+	c.Assert(mcv, Equals, "")
+	c.Assert(lcv, Equals, "")
 
 	report = []string{
 		"001",
@@ -100,28 +103,13 @@ func (s *Day3Suite) TestMostCommonValueInPosition(c *C) {
 		"101",
 		"100",
 	}
-	c.Assert(mostCommonValueInPosition(report, 0), Equals, "1")
-	c.Assert(mostCommonValueInPosition(report, 1), Equals, "0")
-	c.Assert(mostCommonValueInPosition(report, 2), Equals, "=")
+	mcv, lcv = mostAndLeastCommonValuesInGivenPosition(report, 0)
+	c.Assert(mcv, Equals, "1")
+	c.Assert(lcv, Equals, "0")
+	mcv, lcv = mostAndLeastCommonValuesInGivenPosition(report, 1)
+	c.Assert(mcv, Equals, "0")
+	c.Assert(lcv, Equals, "1")
+	mcv, lcv = mostAndLeastCommonValuesInGivenPosition(report, 2)
+	c.Assert(mcv, Equals, "=")
+	c.Assert(lcv, Equals, "=")
 }
-
-func (s *Day3Suite) TestLeastCommonValueInPosition(c *C) {
-	report := []string{
-		"",
-	}
-	index := 0
-	c.Assert(leastCommonValueInPosition(report, index), Equals, "")
-
-	report = []string{
-		"001",
-		"100",
-		"101",
-		"010",
-		"101",
-		"100",
-	}
-	c.Assert(leastCommonValueInPosition(report, 0), Equals, "0")
-	c.Assert(leastCommonValueInPosition(report, 1), Equals, "1")
-	c.Assert(leastCommonValueInPosition(report, 2), Equals, "=")
-}
-
