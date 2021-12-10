@@ -2,6 +2,7 @@ package day3
 
 import (
 	"bufio"
+	"errors"
 	"os"
 	"strconv"
 	"strings"
@@ -88,4 +89,52 @@ func filterReportByBitPositionAndWantedValue(report []string, position int, valu
 		}
 	}
 	return filteredReport
+}
+
+func filterReportWhenMCVandLCVAreTheSame(report []string, position int, dominant string) []string {
+	filteredReport := []string{}
+	for _, entry := range report {
+		if strings.Split(entry, "")[position] == dominant { // pasarle a tipe
+			filteredReport = append(filteredReport, entry)
+		}
+	}
+	return filteredReport
+}
+
+func findTheOxygenGeneratorRating(report []string, position int) (int, error) {
+	if len(report) == 0 {
+		return -1, errors.New("cannot find the Oxygen Generator Rating on an empty report")
+	}
+	if len(report) == 1 {
+		return stringToInt(report[0]), nil
+	}
+
+	mcv, lcv := mostAndLeastCommonValuesInGivenPosition(report, position)
+
+	if mcv == lcv {
+		report = filterReportWhenMCVandLCVAreTheSame(report, position, "1")
+	} else {
+		report = filterReportByBitPositionAndWantedValue(report, position, mcv)
+	}
+
+	return findTheOxygenGeneratorRating(report, position+1)
+}
+
+func findTheCO2ScrubberRating(report []string, position int) (int, error) {
+	if len(report) == 0 {
+		return -1, errors.New("cannot find the CO2 Scrubber Rating on an empty report")
+	}
+	if len(report) == 1 {
+		return stringToInt(report[0]), nil
+	}
+
+	mcv, lcv := mostAndLeastCommonValuesInGivenPosition(report, position)
+
+	if mcv == lcv {
+		report = filterReportWhenMCVandLCVAreTheSame(report, position, "0")
+	} else {
+		report = filterReportByBitPositionAndWantedValue(report, position, lcv)
+	}
+
+	return findTheCO2ScrubberRating(report, position+1)
 }
