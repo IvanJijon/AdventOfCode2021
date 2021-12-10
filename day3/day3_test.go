@@ -118,10 +118,10 @@ func (s *Day3Suite) TestFilterReportEntriesByBitPositionAndWantedValue(c *C) {
 	report := []string{
 		"",
 	}
-	position := 0
+	index := 0
 	value := "0"
 
-	c.Assert(filterReportByBitPositionAndWantedValue(report, position, value), DeepEquals, []string{})
+	c.Assert(filterReportByBitPositionAndWantedValue(report, index, value), DeepEquals, []string{})
 
 	report = []string{
 		"00100",
@@ -137,7 +137,7 @@ func (s *Day3Suite) TestFilterReportEntriesByBitPositionAndWantedValue(c *C) {
 		"00010",
 		"01010",
 	}
-	position = 0
+	index = 0
 	value = "1"
 	filteredReport := []string{
 		"11110",
@@ -148,7 +148,7 @@ func (s *Day3Suite) TestFilterReportEntriesByBitPositionAndWantedValue(c *C) {
 		"10000",
 		"11001",
 	}
-	c.Assert(filterReportByBitPositionAndWantedValue(report, position, value), DeepEquals, filteredReport)
+	c.Assert(filterReportByBitPositionAndWantedValue(report, index, value), DeepEquals, filteredReport)
 }
 
 func (s *Day3Suite) TestFilterReportWhenMCVandLCVAreTheSame(c *C) {
@@ -158,11 +158,11 @@ func (s *Day3Suite) TestFilterReportWhenMCVandLCVAreTheSame(c *C) {
 		"0",
 		"1",
 	}
-	position := 0
-	mcv, lcv := mostAndLeastCommonValuesInGivenPosition(report, position)
+	index := 0
+	mcv, lcv := mostAndLeastCommonValuesInGivenPosition(report, index)
 	c.Assert(mcv, Equals, lcv)
 
-	report = filterReportWhenMCVandLCVAreTheSame(report, position, "1")
+	report = filterReportWhenMCVandLCVAreTheSame(report, index, "1")
 
 	filteredReport := []string{
 		"1",
@@ -171,12 +171,16 @@ func (s *Day3Suite) TestFilterReportWhenMCVandLCVAreTheSame(c *C) {
 	c.Assert(report, DeepEquals, filteredReport)
 }
 
-func (s *Day3Suite) TestFindTheOxygenGeneratorRating(c *C) {
+func (s *Day3Suite) TestFindTheWantedRating(c *C) {
 	report := []string{}
 
-	_, err := findTheOxygenGeneratorRating(report, 0)
+	_, err := findWantedRating(report, 0, co2ScrubberRating)
 	c.Assert(err, NotNil)
-	c.Assert(err.Error(), Equals, "cannot find the Oxygen Generator Rating on an empty report")
+	c.Assert(err.Error(), Equals, "cannot find the wanted rating on an empty report")
+
+	_, err = findWantedRating(report, 0, oxygenGeneratorRating)
+	c.Assert(err, NotNil)
+	c.Assert(err.Error(), Equals, "cannot find the wanted rating on an empty report")
 
 	report = []string{
 		"00100",
@@ -193,50 +197,27 @@ func (s *Day3Suite) TestFindTheOxygenGeneratorRating(c *C) {
 		"01010",
 	}
 
-	ogr, err := findTheOxygenGeneratorRating(report, 0)
-	c.Assert(ogr, Equals, 23)
-	c.Assert(err, IsNil)
-}
-
-func (s *Day3Suite) TestFindTheCO2ScrubberRating(c *C) {
-	report := []string{}
-
-	_, err := findTheCO2ScrubberRating(report, 0)
-	c.Assert(err, NotNil)
-	c.Assert(err.Error(), Equals, "cannot find the CO2 Scrubber Rating on an empty report")
-
-	report = []string{
-		"00100",
-		"11110",
-		"10110",
-		"10111",
-		"10101",
-		"01111",
-		"00111",
-		"11100",
-		"10000",
-		"11001",
-		"00010",
-		"01010",
-	}
-
-	co2s, err := findTheCO2ScrubberRating(report, 0)
+	co2s, err := findWantedRating(report, 0, co2ScrubberRating)
 	c.Assert(co2s, Equals, 10)
+	c.Assert(err, IsNil)
+
+	ogr, err := findWantedRating(report, 0, oxygenGeneratorRating)
+	c.Assert(ogr, Equals, 23)
 	c.Assert(err, IsNil)
 }
 
 func (s *Day3Suite) TestAnswerDay3PartTwo(c *C) {
 
 	report, _ := importData("day3_input")
-	ogr, _ := findTheOxygenGeneratorRating(report, 0)
-	co2s, _ := findTheCO2ScrubberRating(report, 0)
+	ogr, _ := findWantedRating(report, 0, oxygenGeneratorRating)
+	co2s, _ := findWantedRating(report, 0, co2ScrubberRating)
 
 	c.Assert(ogr*co2s, Equals, 4432698)
 }
 
-// Get the most and least common values in given position -> check
-// Filter report by bit position and value -> check
+// Get the most and least common values in given index -> check
+// Filter report by bit index and value -> check
 // Find the oxygen generator rating -> check
 // Find the co2 scrubber rating -> check
-// Remove duplication in rating finding methods
+// Remove duplication in rating finding methods -> check
 // Find a better way of handling edge cases like empty report -> errors ?

@@ -24,8 +24,12 @@ func importData(inputFile string) ([]string, error) {
 	return report, scanner.Err()
 }
 
+func isInputDataCoherent(report []string, index int) bool {
+	return !(len(report) == 0 || index >= len(report[0]))
+}
+
 func gammaRateAsBinaryString(report []string, index int) string {
-	if len(report) == 0 || index >= len(report[0]) {
+	if !isInputDataCoherent(report, index) {
 		return ""
 	}
 	mcv, _ := mostAndLeastCommonValuesInGivenPosition(report, index)
@@ -51,7 +55,7 @@ func epsilonRateFromGammaRate(input string) string {
 }
 
 func mostAndLeastCommonValuesInGivenPosition(report []string, index int) (string, string) {
-	if len(report) == 0 || index >= len(report[0]) {
+	if !isInputDataCoherent(report, index) {
 		return "", ""
 	}
 	mostCommon := "="
@@ -77,64 +81,60 @@ func mostAndLeastCommonValuesInGivenPosition(report []string, index int) (string
 	return mostCommon, leastCommon
 }
 
-func filterReportByBitPositionAndWantedValue(report []string, position int, value string) []string {
-	if len(report) == 0 || position >= len(report[0]) {
+func filterReportByBitPositionAndWantedValue(report []string, index int, value string) []string {
+	if !isInputDataCoherent(report, index) {
 		return []string{}
 	}
 
 	filteredReport := []string{}
 	for _, e := range report {
-		if strings.Split(e, "")[position] == value {
+		if strings.Split(e, "")[index] == value {
 			filteredReport = append(filteredReport, e)
 		}
 	}
 	return filteredReport
 }
 
-func filterReportWhenMCVandLCVAreTheSame(report []string, position int, dominant string) []string {
+func filterReportWhenMCVandLCVAreTheSame(report []string, index int, co2ScrubberRating rating) []string {
 	filteredReport := []string{}
 	for _, entry := range report {
-		if strings.Split(entry, "")[position] == dominant { // pasarle a tipe
+		if strings.Split(entry, "")[index] == co2ScrubberRating.String() {
 			filteredReport = append(filteredReport, entry)
 		}
 	}
 	return filteredReport
 }
 
-func findTheOxygenGeneratorRating(report []string, position int) (int, error) {
-	if len(report) == 0 {
-		return -1, errors.New("cannot find the Oxygen Generator Rating on an empty report")
-	}
-	if len(report) == 1 {
-		return stringToInt(report[0]), nil
-	}
+type rating string
 
-	mcv, lcv := mostAndLeastCommonValuesInGivenPosition(report, position)
-
-	if mcv == lcv {
-		report = filterReportWhenMCVandLCVAreTheSame(report, position, "1")
-	} else {
-		report = filterReportByBitPositionAndWantedValue(report, position, mcv)
-	}
-
-	return findTheOxygenGeneratorRating(report, position+1)
+func (r rating) String() string {
+	return string(r)
 }
 
-func findTheCO2ScrubberRating(report []string, position int) (int, error) {
+const (
+	oxygenGeneratorRating rating = "1"
+	co2ScrubberRating     rating = "0"
+)
+
+func findWantedRating(report []string, index int, r rating) (int, error) {
 	if len(report) == 0 {
-		return -1, errors.New("cannot find the CO2 Scrubber Rating on an empty report")
+		return -1, errors.New("cannot find the wanted rating on an empty report")
 	}
 	if len(report) == 1 {
 		return stringToInt(report[0]), nil
 	}
 
-	mcv, lcv := mostAndLeastCommonValuesInGivenPosition(report, position)
+	mcv, lcv := mostAndLeastCommonValuesInGivenPosition(report, index)
 
 	if mcv == lcv {
-		report = filterReportWhenMCVandLCVAreTheSame(report, position, "0")
+		report = filterReportWhenMCVandLCVAreTheSame(report, index, r)
 	} else {
-		report = filterReportByBitPositionAndWantedValue(report, position, lcv)
+		if r == co2ScrubberRating {
+			report = filterReportByBitPositionAndWantedValue(report, index, lcv)
+		} else {
+			report = filterReportByBitPositionAndWantedValue(report, index, mcv)
+		}
 	}
 
-	return findTheCO2ScrubberRating(report, position+1)
+	return findWantedRating(report, index+1, r)
 }
