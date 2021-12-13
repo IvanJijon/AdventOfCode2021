@@ -6,7 +6,7 @@ from functools import reduce
 # - A function that marks the drawn number in all the boards where
 #   the drawn number is present -> check
 # - A function that verifies if a board has bingo -> check
-# - A function that calculates the Score -> check
+# - A function that calculates the sum_of_unmarked -> check
 #
 
 
